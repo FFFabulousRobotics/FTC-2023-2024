@@ -121,12 +121,19 @@ public class MotorController {
     }
 
     // fl, fr, bl, br
-    public int[] getWheels() {
-        return new int[] {
-                frontLeft.getCurrentPosition(),
-                frontRight.getCurrentPosition(),
-                backLeft.getCurrentPosition(),
-                backRight.getCurrentPosition()
-        };
+    public int getFrontLeft() {
+        return frontLeft.getCurrentPosition();
+    }
+
+    public int getFrontRight() {
+        return frontRight.getCurrentPosition();
+    }
+
+    public int getBackLeft() {
+        return backLeft.getCurrentPosition();
+    }
+
+    public int getBackRight() {
+        return backRight.getCurrentPosition();
     }
 }
