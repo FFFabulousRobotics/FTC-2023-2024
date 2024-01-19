@@ -6,28 +6,38 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp
 public class ManualOpMode extends OpMode {
-    DcMotor motor;
+    MotorController motorController;
 
     @Override
     public void init() {
-        motor = hardwareMap.get(DcMotor.class, "m1");
-//        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "FL");
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "FR");
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "BL");
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "BR");
+
+        motorController = new MotorController(frontLeft, frontRight, backLeft, backRight);
+    }
+
+    @Override
+    public void start() {
+
     }
 
     @Override
     public void loop() {
-        try {
-            motor.setPower(0.3);
-            Thread.sleep(1000);
-            motor.setPower(0);
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (gamepad1.a) {
+            motorController.stop();
+        } else {
+            motorController.move(
+                    gamepad1.left_stick_y,
+                    gamepad1.right_stick_x,
+                    gamepad1.left_stick_x
+            );
         }
     }
 
     @Override
     public void stop() {
-        motor.setPower(0);
+        motorController.stop();
     }
 }

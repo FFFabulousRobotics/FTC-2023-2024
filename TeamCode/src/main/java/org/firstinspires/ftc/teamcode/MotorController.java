@@ -13,7 +13,7 @@ public class MotorController {
     private final DcMotor backLeft;
     private final DcMotor backRight;
 
-    public static double k1 = 0.7;
+    public static double k1 = 0.75;
 
     /**
      * The controller for the motors (with a mecanum wheels setup).
@@ -29,9 +29,7 @@ public class MotorController {
      * @param backRight The back right {@link DcMotor}.
      */
     public MotorController(
-            DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight,
-            DcMotor verticalArm, Servo sender,
-            DcMotor horizontalArm, Servo angleServo, Servo handServo) {
+            DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
 
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
@@ -52,19 +50,15 @@ public class MotorController {
      * @param turn The angle velocity for turning. Set to positive for clockwise, negative for anti-clockwise.
      */
     public void move(double vertical, double horizontal, double turn) {
-        if (k1 == 0.1) {
-            turn = turn * 2;
-        }
-
         double lFront;
         double lBack;
         double rFront;
         double rBack;
 
-        lFront = (vertical + turn + horizontal);
-        lBack = (vertical + turn - horizontal);
-        rFront = -(vertical - turn - horizontal);
-        rBack = -(vertical - turn + horizontal);
+        lFront = -(vertical + turn + horizontal);
+        lBack = -(vertical + turn - horizontal);
+        rFront = (vertical - turn - horizontal);
+        rBack = (vertical - turn + horizontal);
 
         double[] values = {lFront, lBack, rFront, rBack};
 
