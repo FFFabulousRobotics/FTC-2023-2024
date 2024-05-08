@@ -19,42 +19,43 @@ public class ManualOpMode extends LinearOpMode {
         boolean dump = false;
         double start_time = 0;
         double dumpPosition = 0;
-        Gamepad gamepad1Snapshot = new Gamepad();
-        gamepad1Snapshot.fromByteArray(gamepad1.toByteArray());
+        Gamepad gamepad2Snapshot = new Gamepad();
+        gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
 
         while (opModeIsActive()) {
+            if (gamepad2.dpad_up && gamepad2.right_bumper) {
             double timer = getRuntime();
             if (gamepad1.dpad_up && gamepad1.right_bumper) {
                 hardware.setLiftPower(1);
-            } else if (gamepad1.dpad_up && !gamepad1.right_bumper && hardware.getLiftPosition() < 2600) {
+            } else if (gamepad2.dpad_up && !gamepad2.right_bumper && hardware.getLiftPosition() < 2600) {
                 hardware.setLiftPower(-1);
             } else {
                 hardware.setLiftPower(0);
             }
 
-            if (gamepad1.b && gamepad1.right_bumper) {
+            if (gamepad2.b && gamepad2.right_bumper) {
                 hardware.setArmPower(-0.5);
-            } else if (gamepad1.b && !gamepad1.right_bumper) {
+            } else if (gamepad2.b && !gamepad2.right_bumper) {
                 hardware.setArmPower(0.5);
             } else {
                 hardware.setArmPower(0);
             }
 
-            if (gamepad1.x && gamepad1.right_bumper) {
+            if (gamepad2.x && gamepad2.right_bumper) {
                 hardware.setIntakePower(-0.9);
-            } else if (gamepad1.x && !gamepad1.right_bumper) {
+            } else if (gamepad2.x && !gamepad2.right_bumper) {
                 hardware.setIntakePower(0.9);
             } else {
                 hardware.setIntakePower(0);
             }
 
-            if (gamepad1.a) {
+            if (gamepad2.a) {
                 hardware.setHolderPosition(0);
             } else {
                 hardware.setHolderPosition(0.5);
             }
 
-            if (gamepad1.y && !gamepad1Snapshot.y) {
+            if (gamepad2.y && !gamepad2Snapshot.y) {
                 dump = !dump;
                 if(!dump) {
                     start_time = getRuntime();
@@ -74,7 +75,7 @@ public class ManualOpMode extends LinearOpMode {
                 }
             }
 
-            if (gamepad1.dpad_down) {
+            if (gamepad2.dpad_down) {
                 hardware.setDronePosition(0);
             } else {
                 hardware.setDronePosition(1);
@@ -85,7 +86,7 @@ public class ManualOpMode extends LinearOpMode {
                     gamepad1.left_stick_x,
                     gamepad1.right_stick_x);
 
-            gamepad1Snapshot.fromByteArray(gamepad1.toByteArray());
+            gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
             telemetry.update();
             sleep(10);
         }
