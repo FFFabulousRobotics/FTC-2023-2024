@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 @TeleOp
-public class ManualOpMode extends LinearOpMode {
+public class OpModeDebug extends LinearOpMode {
     RobotHardware hardware;
 
     @Override
@@ -17,13 +17,10 @@ public class ManualOpMode extends LinearOpMode {
         waitForStart();
 
         boolean dump = false;
-        double start_time = 0;
-        double dumpPosition = 0;
         Gamepad gamepad1Snapshot = new Gamepad();
         gamepad1Snapshot.fromByteArray(gamepad1.toByteArray());
 
         while (opModeIsActive()) {
-            double timer = getRuntime();
             if (gamepad1.dpad_up && gamepad1.right_bumper) {
                 hardware.setLiftPower(1);
             } else if (gamepad1.dpad_up && !gamepad1.right_bumper && hardware.getLiftPosition() < 2600) {
@@ -56,22 +53,16 @@ public class ManualOpMode extends LinearOpMode {
 
             if (gamepad1.y && !gamepad1Snapshot.y) {
                 dump = !dump;
-                if(!dump) {
-                    start_time = getRuntime();
-                    dumpPosition = hardware.getDumpPosition();
-                }
             }
 
             if (dump && hardware.getDumpPosition() > 0.6) {
                 hardware.setDumpPosition(0.35);
             } else if (!dump && hardware.getDumpPosition() < 0.6){
-                if (timer-start_time >= 0.075 && dumpPosition <=0.95) {
+                for (double dumpPosition = 0.45; dumpPosition <= 0.95; dumpPosition += 0.025) {
                     hardware.setDumpPosition(dumpPosition);
-                    dumpPosition += 0.025;
-                    start_time = getRuntime();
-                } else if (dumpPosition >= 0.95) {
-                    hardware.setDumpPosition(0.98);
+                    sleep(75);
                 }
+                hardware.setDumpPosition(0.98);
             }
 
             if (gamepad1.dpad_down) {
