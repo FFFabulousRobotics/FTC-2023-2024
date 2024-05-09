@@ -17,15 +17,15 @@ public class ManualOpMode extends LinearOpMode {
         waitForStart();
 
         boolean dump = false;
+        boolean on_recovering = false;
         double start_time = 0;
-        double dumpPosition = 0;
+        double dumpPosition = hardware.getDumpPosition();
         Gamepad gamepad2Snapshot = new Gamepad();
         gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
 
         while (opModeIsActive()) {
-            if (gamepad2.dpad_up && gamepad2.right_bumper) {
             double timer = getRuntime();
-            if (gamepad1.dpad_up && gamepad1.right_bumper) {
+            if (gamepad2.dpad_up && gamepad2.right_bumper) {
                 hardware.setLiftPower(1);
             } else if (gamepad2.dpad_up && !gamepad2.right_bumper && hardware.getLiftPosition() < 2600) {
                 hardware.setLiftPower(-1);
@@ -57,21 +57,23 @@ public class ManualOpMode extends LinearOpMode {
 
             if (gamepad2.y && !gamepad2Snapshot.y) {
                 dump = !dump;
-                if(!dump) {
+                if (!dump) {
                     start_time = getRuntime();
-                    dumpPosition = hardware.getDumpPosition();
+                    on_recovering = true;
+                    dumpPosition = hardware.getDumpPosition() - 0.075;
                 }
             }
 
             if (dump && hardware.getDumpPosition() > 0.6) {
                 hardware.setDumpPosition(0.35);
-            } else if (!dump && hardware.getDumpPosition() < 0.6){
-                if (timer-start_time >= 0.075 && dumpPosition <=0.95) {
+            } else if ((!dump && hardware.getDumpPosition() < 0.6) || (on_recovering && !dump)) {
+                if (timer - start_time >= 0.075 && dumpPosition <= 0.95) {
                     hardware.setDumpPosition(dumpPosition);
                     dumpPosition += 0.025;
                     start_time = getRuntime();
-                } else if (dumpPosition >= 0.95) {
+                } else if (timer - start_time >= 0.075 && dumpPosition >= 0.95) {
                     hardware.setDumpPosition(0.98);
+                    on_recovering = false;
                 }
             }
 
