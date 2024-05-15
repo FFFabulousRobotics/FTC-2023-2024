@@ -16,12 +16,18 @@ public class ManualOpMode extends LinearOpMode {
 
         waitForStart();
 
-        boolean dump = false;
+        boolean dump;
+        boolean on_stretch = false;
         boolean on_recovering = false;
         double start_time = 0;
         double dumpPosition = hardware.getDumpPosition();
         Gamepad gamepad2Snapshot = new Gamepad();
         gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
+        if (hardware.getDumpPosition() > 0.6) {
+            dump = false;
+        } else {
+            dump = true;
+        }
 
         while (opModeIsActive()) {
             double timer = getRuntime();
@@ -55,27 +61,62 @@ public class ManualOpMode extends LinearOpMode {
                 hardware.setHolderPosition(0.5);
             }
 
-            if (gamepad2.y && !gamepad2Snapshot.y) {
-                dump = !dump;
-                if (!dump) {
-                    start_time = getRuntime();
-                    on_recovering = true;
-                    dumpPosition = hardware.getDumpPosition() - 0.075;
+            if(!on_recovering && !on_stretch) {
+                if (hardware.getDumpPosition() > 0.6) {
+                    dump = false;
+                } else {
+                    dump = true;
                 }
             }
 
-            if (dump && hardware.getDumpPosition() > 0.6) {
-                hardware.setDumpPosition(0.35);
-            } else if ((!dump && hardware.getDumpPosition() < 0.6) || (on_recovering && !dump)) {
-                if (timer - start_time >= 0.075 && dumpPosition <= 0.95) {
+            if (gamepad2.y && !gamepad2Snapshot.y && !on_recovering && !on_stretch) {
+                dump = !dump;
+                if (dump) {
+                    start_time = getRuntime() - 0.25;
+                    on_stretch = true;
+                    dumpPosition = hardware.getDumpPosition();
+                }else{
+                    start_time = getRuntime() - 0.25;
+                    on_recovering = true;
+                    dumpPosition = hardware.getDumpPosition();
+                }
+            }
+
+            if((dump && hardware.getDumpPosition() > 0.6) || (on_stretch && dump)){
+                if(timer - start_time >= 0.025 && hardware.getDumpPosition() >= 0.4){
+                    hardware.setDumpPosition(dumpPosition);
+                    dumpPosition -= 0.025;
+                    start_time = getRuntime();
+                } else if (timer-start_time >= 0.25 && dumpPosition <= 0.4) {
+                    hardware.setDumpPosition(0.35);
+                    on_stretch = false;
+                }
+            }
+            else if ((!dump && hardware.getDumpPosition() < 0.6) || (on_recovering && !dump)) {
+                if (timer - start_time >= 0.025 && dumpPosition <= 0.95) {
                     hardware.setDumpPosition(dumpPosition);
                     dumpPosition += 0.025;
                     start_time = getRuntime();
-                } else if (timer - start_time >= 0.075 && dumpPosition >= 0.95) {
+                } else if (timer - start_time >= 0.025 && dumpPosition >= 0.95) {
                     hardware.setDumpPosition(0.98);
                     on_recovering = false;
                 }
             }
+            telemetry.addData("dumpPosition",dumpPosition);
+
+
+//            if (dump && hardware.getDumpPosition() > 0.6) {
+//                hardware.setDumpPosition(0.35);
+//            } else if ((!dump && hardware.getDumpPosition() < 0.6) || (on_recovering && !dump)) {
+//                if (timer - start_time >= 0.05 && dumpPosition <= 0.95) {
+//                    hardware.setDumpPosition(dumpPosition);
+//                    dumpPosition += 0.025;
+//                    start_time = getRuntime();
+//                } else if (timer - start_time >= 0.05 && dumpPosition >= 0.95) {
+//                    hardware.setDumpPosition(0.98);
+//                    on_recovering = false;
+//                }
+//            }
 
             if (gamepad2.dpad_down) {
                 hardware.setDronePosition(0);

@@ -44,8 +44,10 @@ public interface RobotHardware {
 
     // autonomous
     RobotHardware forward(double d);
+    RobotHardware fastForward(double d,int step);
     RobotHardware fastForward(double d);
     RobotHardware backward(double d);
+    RobotHardware fastBackward(double d,int step);
     RobotHardware fastBackward(double d);
     RobotHardware rightShift(double d);
     RobotHardware leftShift(double d);

@@ -680,6 +680,13 @@ public class RobotHardwareImpl implements RobotHardware {
     public RobotHardware forward(double d) {
         return driveStraight(0.6, d, getHeading());
     }
+    @Override
+    public RobotHardware fastForward(double d,int step){
+        for(int i=0;i<step;i++){
+            forward(d/step);
+        }
+        return this;
+    }
 
     @Override
     public RobotHardware fastForward(double d) {return  driveStraight(0.7, d, getHeading());}
@@ -687,6 +694,14 @@ public class RobotHardwareImpl implements RobotHardware {
     public RobotHardware backward(double d) {
         return driveStraight(0.6, -d, getHeading());
     }
+    @Override
+    public RobotHardware fastBackward(double d,int step){
+        for(int i=0;i<step;i++){
+            fastBackward(d/step);
+        }
+        return this;
+    }
+
 
     @Override
     public RobotHardware fastBackward(double d) {return driveStraight(0.7, -d, getHeading());}
