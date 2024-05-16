@@ -56,9 +56,9 @@ public class ManualOpMode extends LinearOpMode {
             }
 
             if (gamepad2.a) {
-                hardware.setHolderPosition(0);
-            } else {
                 hardware.setHolderPosition(0.5);
+            } else {
+                hardware.setHolderPosition(0);
             }
 
             if(!on_recovering && !on_stretch) {
@@ -83,43 +83,30 @@ public class ManualOpMode extends LinearOpMode {
             }
 
             if((dump && hardware.getDumpPosition() > 0.6) || (on_stretch && dump)){
-                if(timer - start_time >= 0.025 && hardware.getDumpPosition() >= 0.4){
-                    hardware.setDumpPosition(dumpPosition);
+                if(timer - start_time >= 0.025 && hardware.getDumpPosition() >= 0.43){
                     dumpPosition -= 0.025;
                     start_time = getRuntime();
-                } else if (timer-start_time >= 0.25 && dumpPosition <= 0.4) {
-                    hardware.setDumpPosition(0.35);
+                } else if (timer-start_time >= 0.25 && dumpPosition <= 0.43) {
+                    dumpPosition = 0.4;
                     on_stretch = false;
                 }
+                hardware.setDumpPosition(dumpPosition);
             }
-            else if ((!dump && hardware.getDumpPosition() < 0.6) || (on_recovering && !dump)) {
-                if (timer - start_time >= 0.025 && dumpPosition <= 0.95) {
-                    hardware.setDumpPosition(dumpPosition);
+            if ((!dump && hardware.getDumpPosition() < 0.6) || (on_recovering && !dump)) {
+                if (timer - start_time >= 0.05 && dumpPosition <= 0.95) {
                     dumpPosition += 0.025;
                     start_time = getRuntime();
-                } else if (timer - start_time >= 0.025 && dumpPosition >= 0.95) {
-                    hardware.setDumpPosition(0.98);
+                }
+                else if (timer - start_time >= 0.025 && dumpPosition >= 0.95) {
+                    dumpPosition = 0.98;
                     on_recovering = false;
                 }
+                hardware.setDumpPosition(dumpPosition);
             }
             telemetry.addData("dumpPosition",dumpPosition);
 
-
-//            if (dump && hardware.getDumpPosition() > 0.6) {
-//                hardware.setDumpPosition(0.35);
-//            } else if ((!dump && hardware.getDumpPosition() < 0.6) || (on_recovering && !dump)) {
-//                if (timer - start_time >= 0.05 && dumpPosition <= 0.95) {
-//                    hardware.setDumpPosition(dumpPosition);
-//                    dumpPosition += 0.025;
-//                    start_time = getRuntime();
-//                } else if (timer - start_time >= 0.05 && dumpPosition >= 0.95) {
-//                    hardware.setDumpPosition(0.98);
-//                    on_recovering = false;
-//                }
-//            }
-
             if (gamepad2.dpad_down) {
-                hardware.setDronePosition(0);
+                hardware.setDronePosition(0.75);
             } else {
                 hardware.setDronePosition(1);
             }
@@ -129,6 +116,7 @@ public class ManualOpMode extends LinearOpMode {
                     gamepad1.left_stick_x,
                     gamepad1.right_stick_x);
 
+            telemetry.addData("distance",hardware.getDistance());
             gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
             telemetry.update();
             sleep(10);

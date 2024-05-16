@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.util.Size;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -69,6 +70,7 @@ public class RobotHardwareImpl implements RobotHardware {
     private Servo dumpServo = null;
     private Servo droneServo = null;
     private Servo holderServo = null;
+    private Rev2mDistanceSensor distanceSensor = null;
 
     private IMU imu = null;
 
@@ -168,6 +170,7 @@ public class RobotHardwareImpl implements RobotHardware {
         dumpServo = hardwareMap.get(Servo.class, "Dump");
         droneServo = hardwareMap.get(Servo.class, "Drone");
         holderServo = hardwareMap.get(Servo.class, "Holder");
+        distanceSensor = hardwareMap.get(Rev2mDistanceSensor.class,"Distance");
 
         // hub orientation
         // TODO: EDIT these two lines to match the actual mounting configuration
@@ -953,6 +956,11 @@ public class RobotHardwareImpl implements RobotHardware {
 
         // Multiply the error by the gain to determine the required steering correction/  Limit the result to +/- 1.0
         return Range.clip(headingError * proportionalGain, -1, 1);
+    }
+
+    @Override
+    public double getDistance() {
+        return distanceSensor.getDistance(DistanceUnit.INCH);
     }
 }
  
