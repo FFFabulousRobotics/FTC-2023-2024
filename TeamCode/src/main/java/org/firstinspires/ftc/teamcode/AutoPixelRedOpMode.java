@@ -6,7 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 @Autonomous
-public class AutoPixelRedOpMode extends LinearOpMode {
+public class
+
+
+AutoPixelRedOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
