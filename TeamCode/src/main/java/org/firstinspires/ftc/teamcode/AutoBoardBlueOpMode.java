@@ -14,7 +14,7 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
         RobotHardware hardware = new RobotHardwareImpl(this);
         hardware.initDoubleVision();
         hardware.initMovement();
-        hardware.setHolderPosition(0);
+        hardware.setHolderPosition(0.5);
 
         waitForStart();
 
@@ -29,7 +29,7 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
         double xCoord = recognition == null ? 320 : (recognition.getLeft() + recognition.getRight()) / 2;
 
         //!!!!!!!!
-        //                              xCoord = 500;
+        //xCoord = 200;
         //This line is used to debug,delete it when it's finished!
         //!!!!!!!!
 
@@ -56,11 +56,11 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
                     .setDumpPosition(0.4)
                     .sleep(350)
                     .setArmPower(-0.75)
-                    .sleep(650)
+                    .sleep(750)
                     .setArmPower(0)
                     .gotoDistance(7.6,-11.5)
                     //.fastBackward(-11)
-                    .setHolderPosition(0.5)
+                    .setHolderPosition(0)
                     .sleep(400)
                     .forward(-4)
                     .rightShift(-17)
@@ -78,12 +78,12 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
                     .setDumpPosition(0.4)
                     .sleep(350)
                     .setArmPower(-0.75)
-                    .sleep(650)
+                    .sleep(750)
                     .setArmPower(0)
                     .fastBackward(-16)
                     .leftShift(-2)
                     .fastBackward(-15.5)
-                    .setHolderPosition(0.5)
+                    .setHolderPosition(0)
                     .sleep(400)
                     .fastForward(-7)
                     .rightShift(-31)
@@ -104,13 +104,13 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
                     .setDumpPosition(0.4)
                     .sleep(350)
                     .setArmPower(-0.65)
-                    .sleep(650)
+                    .sleep(750)
                     .setArmPower(0)
                     .gotoDistance(7.6,-10.5)
                     //.backward(-10.5)
-                    .setHolderPosition(0.5)
+                    .setHolderPosition(0)
                     .sleep(400)
-                    .forward(-4)
+                    .forward(-6)
                     .rightShift(-22)
                     .fastBackward(-10);
         }

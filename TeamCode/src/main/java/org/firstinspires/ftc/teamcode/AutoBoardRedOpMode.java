@@ -14,7 +14,7 @@ public class AutoBoardRedOpMode extends LinearOpMode {
         RobotHardware hardware = new RobotHardwareImpl(this);
         hardware.initDoubleVision();
         hardware.initMovement();
-        hardware.setHolderPosition(0);
+        hardware.setHolderPosition(0.5);
 
         waitForStart();
 
@@ -33,7 +33,7 @@ public class AutoBoardRedOpMode extends LinearOpMode {
                     .forward(-10)
                     .spin(0)
                     .fastForward(-36+3)
-                    .fastBackward(-12)
+                    .fastBackward(-12-3)
                     .setIntakePower(0.4)
                     .sleep(500)
                     .setIntakePower(0)
@@ -47,21 +47,20 @@ public class AutoBoardRedOpMode extends LinearOpMode {
                     .setDumpPosition(0.4)
                     .sleep(350)
                     .setArmPower(-0.75)
-                    .sleep(650)
+                    .sleep(750)
                     .setArmPower(0)
-                    .gotoDistance(7.6,-11.5)
+                    .gotoDistance(7.6,-10.5)
                     //.fastBackward(-11)
-                    .sleep(500)
-                    .setHolderPosition(0.5)
+                    .setHolderPosition(0)
                     .sleep(400)
                     .forward(-4)
-                    .leftShift(-18)
+                    .leftShift(-17)
                     .backward(-10);
-        } else if (xCoord < 213) {
+        } else if (xCoord < 312) {
             hardware.fastForward(-24)
                     .spin(90)
                     .forward(-12)
-                    .fastBackward(-7)
+                    .fastBackward(-12)
                     .setIntakePower(0.4)
                     .setArmPower(0.75)
                     .sleep(1000)
@@ -70,41 +69,41 @@ public class AutoBoardRedOpMode extends LinearOpMode {
                     .setDumpPosition(0.4)
                     .sleep(350)
                     .setArmPower(-0.75)
-                    .sleep(650)
+                    .sleep(750)
                     .setArmPower(0)
                     .fastBackward(-16)
                     .rightShift(-2)
-                    .fastBackward(-14,2)
-                    .setHolderPosition(0.5)
+                    .fastBackward(-15.5)
+                    .setHolderPosition(0)
                     .sleep(400)
                     .fastForward(-7)
                     .leftShift(-31)
                     .fastBackward(-15);
         } else {
             hardware.fastForward(-36)
-                    .fastBackward(-9)
-                    .setIntakePower(0.3)
-                    .sleep(750)
+                    .fastBackward(-8)
+                    .setIntakePower(0.4)
+                    .sleep(500)
                     .setIntakePower(0)
                     .gotoDistance(31,-3)
+                    //.backward(-8)
                     .spin(90)
-                    .fastBackward(-20)
+                    .fastBackward(-20,3)
                     .setArmPower(0.75)
                     .sleep(1000)
                     .setArmPower(0)
-                    .setDumpPosition(0.35)
-                    .sleep(500)
-                    .setArmPower(-0.75)
-                    .sleep(650)
-                    .setArmPower(0)
-                    .fastBackward(-10.5)
-                    .driveStraight(0.3, 1, hardware.getHeading())
-                    .setHolderPosition(0.5)
+                    .setDumpPosition(0.4)
+                    .sleep(350)
+                    .setArmPower(-0.65)
                     .sleep(750)
-                    .forward(-6)
-                    .leftShift(-24)
-                    .spin(90)
-                    .fastBackward(-18);
+                    .setArmPower(0)
+                    .gotoDistance(7.6,-11.5)
+                    //.backward(-10.5)
+                    .setHolderPosition(0)
+                    .sleep(400)
+                    .forward(-4)
+                    .leftShift(-22)
+                    .fastBackward(-10);
         }
 
     }
