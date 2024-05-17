@@ -22,8 +22,8 @@ public class ManualOpMode extends LinearOpMode {
     static double CYCLE_TIME_SECONDS = 0.04;
     static double DUMP_STRETCHING_FAST_THRESHOLD = 0.43;
     static double DUMP_RETRACTING_FAST_THRESHOLD = 0.95;
-    static double DUMP_STRETCHED_POSITION = 0.4;
-    static double DUMP_RETRACTED_POSITION = 0.98;
+    static double DUMP_STRETCHED_POSITION = 0.38;
+    static double DUMP_RETRACTED_POSITION = 0.96;
     static double DUMP_CHANGING_OFFSET = 0.025;
 
 
@@ -40,7 +40,7 @@ public class ManualOpMode extends LinearOpMode {
         double targetDumpPosition = hardware.getDumpPosition();
 //        Gamepad gamepad2Snapshot = new Gamepad();
 //        gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
-        if (hardware.getDumpPosition() > DUMP_JUDGING_THRESHOLD) {
+        if (hardware.getDumpPosition() < DUMP_JUDGING_THRESHOLD) {
             dumpState = DumpState.STRETCHED;
         } else {
             dumpState = DumpState.RETRACTED;
@@ -65,9 +65,9 @@ public class ManualOpMode extends LinearOpMode {
             }
 
             if (gamepad2.x && gamepad2.right_bumper) {
-                hardware.setIntakePower(INTAKE_ROLL_OUT_POWER);
-            } else if (gamepad2.x && !gamepad2.right_bumper) {
                 hardware.setIntakePower(INTAKE_ROLL_IN_POWER);
+            } else if (gamepad2.x && !gamepad2.right_bumper) {
+                hardware.setIntakePower(INTAKE_ROLL_OUT_POWER);
             } else {
                 hardware.setIntakePower(0);
             }
@@ -102,6 +102,7 @@ public class ManualOpMode extends LinearOpMode {
                             targetDumpPosition = DUMP_STRETCHED_POSITION;
                             dumpState = DumpState.STRETCHED;
                         }
+                        hardware.setDumpPosition(targetDumpPosition);
                         break;
                     case RETRACTING:
                         if (hardware.getDumpPosition() <= DUMP_RETRACTING_FAST_THRESHOLD) {
@@ -111,11 +112,11 @@ public class ManualOpMode extends LinearOpMode {
                             targetDumpPosition = DUMP_RETRACTED_POSITION;
                             dumpState = DumpState.RETRACTED;
                         }
+                        hardware.setDumpPosition(targetDumpPosition);
                         break;
                 }
             }
 
-            hardware.setDumpPosition(targetDumpPosition);
 
             telemetry.addData("targetDumpPosition", targetDumpPosition);
 
