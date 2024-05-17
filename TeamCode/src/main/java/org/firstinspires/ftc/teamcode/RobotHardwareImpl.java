@@ -962,6 +962,16 @@ public class RobotHardwareImpl implements RobotHardware {
     public double getDistance() {
         return distanceSensor.getDistance(DistanceUnit.INCH);
     }
+    @Override
+    public RobotHardware gotoDistance(double target_distance,double init_distance){
+        if(Math.abs(target_distance - getDistance() - init_distance) < 1){
+            fastForward(-(getDistance()-target_distance));
+        }else{
+            fastForward(-init_distance);
+        }
+        return this;
+    }
+
 }
  
  

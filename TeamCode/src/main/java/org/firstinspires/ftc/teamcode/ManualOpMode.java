@@ -19,7 +19,7 @@ public class ManualOpMode extends LinearOpMode {
     static double HOLDER_CLOSE_POSITION = 0;
     static double DRONE_OPEN_POSITION = 0.64;
     static double DRONE_CLOSE_POSITION = 0.94;
-    static double CYCLE_TIME_SECONDS = 0.025;
+    static double CYCLE_TIME_SECONDS = 0.04;
     static double DUMP_STRETCHING_FAST_THRESHOLD = 0.43;
     static double DUMP_RETRACTING_FAST_THRESHOLD = 0.95;
     static double DUMP_STRETCHED_POSITION = 0.4;
@@ -38,8 +38,8 @@ public class ManualOpMode extends LinearOpMode {
         DumpState dumpState;
         double checkpoint = 0;
         double targetDumpPosition = hardware.getDumpPosition();
-        Gamepad gamepad2Snapshot = new Gamepad();
-        gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
+//        Gamepad gamepad2Snapshot = new Gamepad();
+//        gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
         if (hardware.getDumpPosition() > DUMP_JUDGING_THRESHOLD) {
             dumpState = DumpState.STRETCHED;
         } else {
@@ -78,7 +78,7 @@ public class ManualOpMode extends LinearOpMode {
                 hardware.setHolderPosition(HOLDER_CLOSE_POSITION);
             }
 
-            if (gamepad2.y && !gamepad2Snapshot.y && dumpState.isAtIdle()) {
+            if (gamepad2.y && dumpState.isAtIdle()) {
                 checkpoint = timer;
                 switch (dumpState) {
                     case RETRACTED:
@@ -128,7 +128,7 @@ public class ManualOpMode extends LinearOpMode {
             hardware.driveRobot(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
             telemetry.addData("distance", hardware.getDistance());
-            gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
+//            gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
             telemetry.update();
             sleep(10);
         }

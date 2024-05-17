@@ -65,4 +65,5 @@ public interface RobotHardware {
     void holdHeading(double maxTurnSpeed, double heading, double holdTime);
     double getSteeringCorrection(double desiredHeading, double proportionalGain);
     double getDistance();
+    RobotHardware gotoDistance(double target_distance,double init_distance);
 }
