@@ -15,6 +15,7 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
         hardware.initDoubleVision();
         hardware.initMovement();
         hardware.setHolderPosition(0);
+        hardware.setDronePosition(0.94);
 
         waitForStart();
 
@@ -46,7 +47,7 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
                     .setIntakePower(0.4)
                     .sleep(500)
                     .setIntakePower(0)
-                    .gotoDistance(27,-4)
+                    .fastBackward(-4)
                     //.fastBackward(-4)
                     .spin(-90)
                     .fastBackward(-8)
@@ -58,13 +59,14 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
                     .setArmPower(-0.75)
                     .sleep(650)
                     .setArmPower(0)
-                    .gotoDistance(7.6,-11.5)
+                    .fastBackward(-11.5)
                     //.fastBackward(-11)
                     .setHolderPosition(0.5)
                     .sleep(400)
-                    .forward(-4)
+                    .forward(-6)
                     .rightShift(-17)
-                    .backward(-10);
+                    .backward(-5);
+//                    .backward(-10);
         } else if (xCoord >= 426) {
             hardware.fastForward(-24)
                     .spin(-90)
@@ -87,14 +89,15 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
                     .sleep(400)
                     .fastForward(-7)
                     .rightShift(-31)
-                    .fastBackward(-15);
+                    .backward(-5);
+//                    .fastBackward(-15);
         } else {
             hardware.fastForward(-36)
-                    .fastBackward(-8)
+                    .fastBackward(-6)
                     .setIntakePower(0.4)
                     .sleep(500)
                     .setIntakePower(0)
-                    .gotoDistance(31,-3)
+                    .fastBackward(-3)
                     //.backward(-8)
                     .spin(-90)
                     .fastBackward(-20,3)
@@ -106,13 +109,14 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
                     .setArmPower(-0.65)
                     .sleep(650)
                     .setArmPower(0)
-                    .gotoDistance(7.6,-10.5)
+                    .backward(-10.5)
                     //.backward(-10.5)
                     .setHolderPosition(0.5)
                     .sleep(400)
-                    .forward(-4)
-                    .rightShift(-22)
-                    .fastBackward(-10);
+                    .forward(-6)
+                    .rightShift(-24)
+                    .backward(-5);
+//                    .fastBackward(-10);
         }
 
     }

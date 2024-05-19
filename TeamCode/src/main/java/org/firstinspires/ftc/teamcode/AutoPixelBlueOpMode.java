@@ -15,6 +15,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
         hardware.initDoubleVision();
         hardware.initMovement();
         hardware.setHolderPosition(0.5);
+        hardware.setDronePosition(0.94);
 
         waitForStart();
 
@@ -68,7 +69,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
                     .forward(-12+2)
                     .spin(0)
                     .forward(-24+3-12)
-                    .backward(-12)
+                    .backward(-14)
                     .setIntakePower(0.2)
                     .sleep(750)
                     .setIntakePower(0)
@@ -100,7 +101,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
 //                    .fastBackward(-12);
         } else {
             hardware.forward(-36)
-                    .backward(-12+2.5)
+                    .backward(-12+4)
                     .setIntakePower(0.2)
                     .sleep(750)
                     .setIntakePower(0)

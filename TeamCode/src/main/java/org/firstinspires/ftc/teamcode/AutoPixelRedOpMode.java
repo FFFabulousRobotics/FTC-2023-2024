@@ -27,6 +27,8 @@ AutoPixelRedOpMode extends LinearOpMode {
         Recognition recognition = null;
         double xCoord = 320;
         double yCoord = 400;
+        hardware.setHolderPosition(0);
+        hardware.setDronePosition(0.94);
 
         while (yCoord > 240) {
 
@@ -39,14 +41,14 @@ AutoPixelRedOpMode extends LinearOpMode {
         }
 
         if (xCoord >= 426) {
-            hardware.forward(-24)
-                    .spin(-90)
-                    .forward(-12)
-                    .backward(-12+3)
-                    .setIntakePower(0.2)
-                    .sleep(750)
-                    .setIntakePower(0)
-                    .backward(-6);
+//            hardware.forward(-24)
+//                    .spin(-90)
+//                    .forward(-12)
+//                    .backward(-12+3)
+//                    .setIntakePower(0.2)
+//                    .sleep(750)
+//                    .setIntakePower(0)
+//                    .backward(-6);
 //            hardware.forward(-3)
 //                    .fastSpin(90)
 //                    .fastForward(-12)
@@ -72,17 +74,79 @@ AutoPixelRedOpMode extends LinearOpMode {
 //                    .forward(-4)
 //                    .rightShift(-20+6)
 //                    .fastBackward(-12);
+            hardware.forward(-24)
+                    .spin(-90)
+                    .forward(-10)
+                    .backward(-6)
+                    .setIntakePower(0.4)
+                    .sleep(750)
+                    .setIntakePower(0)
+                    .backward(-4);
+
+            //use it when it's finished
+//            hardware.sleep(10000)//it's a temporary number,remember to change it!
+//                    .fastBackward(-48,2)
+//                    .setArmPower(0.75)
+//                    .sleep(1200)
+//                    .setArmPower(0)
+//                    .setDumpPosition(0.4)
+//                    .sleep(450)
+//                    .setArmPower(-0.75)
+//                    .sleep(650)
+//                    .setArmPower(0)
+//                    .fastBackward(26)    //temporary number
+//                    .backward(6)         //temporary number
+//                    .sleep(500)
+//                    .setHolderPosition(0.5);
+            //.forward(2);
         } else if (xCoord < 213) {
-            hardware.forward(-3)
+            hardware.forward(-24)
                     .spin(90)
-                    .forward(-12+2)
-                    .spin(0)
-                    .forward(-24+3-12)
-                    .backward(-12)
-                    .setIntakePower(0.2)
+                    .forward(-12)
+                    .backward(-12+3)
+                    .setIntakePower(0.4)
                     .sleep(750)
                     .setIntakePower(0)
                     .backward(-6);
+
+
+//            hardware.forward(-24)
+//                    .spin(90)
+//                    .forward(-20)
+//                    .backward(-20)
+//                    .setIntakePower(0.2)
+//                    .sleep(750)
+//                    .setIntakePower(0);
+//
+//            //use it when it's finished
+//            hardware.sleep(10000)//it's a temporary number,remember to change it!
+//                    .fastBackward(-48,2)
+//                    .setArmPower(0.75)
+//                    .sleep(1200)
+//                    .setArmPower(0)
+//                    .setDumpPosition(0.4)
+//                    .sleep(450)
+//                    .setArmPower(-0.75)
+//                    .sleep(650)
+//                    .setArmPower(0)
+//                    .fastBackward(26)    //temporary number
+//                    .backward(6)         //temporary number
+//                    .sleep(500)
+//                    .setHolderPosition(0.5);
+//                    //.forward(2);
+
+            //previous code
+//            hardware.forward(-3)
+//                    .spin(90)
+//                    .forward(-8)
+//                    .spin(0)
+//                    .forward(-24+3-12)
+//                    .backward(-12)
+//                    .setIntakePower(0.2)
+//                    .sleep(750)
+//                    .setIntakePower(0)
+//                    .backward(-6);
+
 //            hardware.forward(-3)
 //                    .fastSpin(-90)
 //                    .fastForward(-12)
@@ -110,11 +174,29 @@ AutoPixelRedOpMode extends LinearOpMode {
 //                    .fastBackward(-12);
         } else {
             hardware.forward(-36)
-                    .backward(-12+2.5)
-                    .setIntakePower(0.2)
+                    .backward(-12+2.5) //it may cause some problem?
+                    .setIntakePower(0.4)
                     .sleep(750)
                     .setIntakePower(0)
-                    .backward(-6);
+                    .backward(-4);
+
+//            hardware.sleep(10000)//it's a temporary number,remember to change it!
+//                    .spin(90)
+//                    .fastBackward(-48,2)
+//                    .setArmPower(0.75)
+//                    .sleep(1200)
+//                    .setArmPower(0)
+//                    .setDumpPosition(0.4)
+//                    .sleep(450)
+//                    .setArmPower(-0.75)
+//                    .sleep(650)
+//                    .setArmPower(0)
+//                    .fastBackward(26)    //temporary number
+//                    .backward(6)         //temporary number
+//                    .sleep(500)
+//                    .setHolderPosition(0.5)
+//                    .forward(2);
+//                    .backward(-6);
 //            hardware.fastForward(-36)
 //                    .fastBackward(-12)
 //                    .setIntakePower(-0.6)

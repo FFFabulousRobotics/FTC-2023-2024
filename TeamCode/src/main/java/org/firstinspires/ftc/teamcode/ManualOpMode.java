@@ -13,8 +13,8 @@ public class ManualOpMode extends LinearOpMode {
     static double LIFT_RETRACT_POWER = -1;
     static double ARM_EXTRACT_POWER = -0.5;
     static double ARM_RETRACT_POWER = 0.5;
-    static double INTAKE_ROLL_IN_POWER = -0.9;
-    static double INTAKE_ROLL_OUT_POWER = 0.9;
+    static double INTAKE_ROLL_IN_POWER = -0.8;
+    static double INTAKE_ROLL_OUT_POWER = 0.8;
     static double HOLDER_OPEN_POSITION = 0.5;
     static double HOLDER_CLOSE_POSITION = 0;
     static double DRONE_OPEN_POSITION = 0.64;
@@ -119,6 +119,7 @@ public class ManualOpMode extends LinearOpMode {
 
 
             telemetry.addData("targetDumpPosition", targetDumpPosition);
+            telemetry.addData("dumpstate",dumpState);
 
             if (gamepad2.dpad_down) {
                 hardware.setDronePosition(DRONE_OPEN_POSITION);
