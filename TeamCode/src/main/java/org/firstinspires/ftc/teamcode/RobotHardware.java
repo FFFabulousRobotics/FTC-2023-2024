@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -66,4 +67,35 @@ public interface RobotHardware {
     double getSteeringCorrection(double desiredHeading, double proportionalGain);
     double getDistance();
     RobotHardware gotoDistance(double target_distance,double init_distance);
+
+    double[] SpinVector(double[] vector, double angle);
+
+    double[] getDisplacement(double[] CurrentPos, double[] DesiredPos);
+
+    RobotHardware gotoPosition(double[] CurrentPos, double[] DesiredPos);
+
+    RobotHardware gotoPosition(double x, double y, double h);
+
+    RobotHardware gotoPosition2(double[] CurrentPos, double[] DesiredPos);
+
+    RobotHardware gotoPosition2(double x, double y, double h);
+
+    RobotHardware fastGotoPosition(double[] CurrentPos, double[] DesiredPos);
+
+    RobotHardware fastGotoPosition(double x, double y, double h);
+
+    void setDiagonalTargetPosition(int moveCounts, double angle);
+
+    RobotHardware driveDiagonal(double maxDriveSpeed,
+                                double distance,
+                                int angle,
+                                double heading);
+
+    RobotHardware moveDiagonally(double distance, int angle);
+
+    SparkFunOTOS.Pose2D getPosition();
+
+    RobotHardware stretchArm();
+
+    RobotHardware resetArm();
 }

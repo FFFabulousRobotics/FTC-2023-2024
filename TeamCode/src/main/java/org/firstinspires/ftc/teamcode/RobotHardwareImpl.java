@@ -4,6 +4,7 @@ import android.util.Size;
 
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -14,8 +15,6 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.CameraControl;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -26,7 +25,6 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Take control of all the robot hardware.
@@ -73,6 +71,7 @@ public class RobotHardwareImpl implements RobotHardware {
     private Rev2mDistanceSensor distanceSensor = null;
 
     private IMU imu = null;
+    private SparkFunOTOS otos = null;
 
 
     // auto drive
@@ -183,6 +182,8 @@ public class RobotHardwareImpl implements RobotHardware {
         imu = opMode.hardwareMap.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
         imu.resetYaw();
+        otos = opMode.hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        configureOtos();
         telemetry.addData(">", "Hardware Initialized");
 //        telemetry.addData("OMGGG", hardwareConfig.hardware.chassis.motors.getClass().getName());
         telemetry.update();
@@ -500,9 +501,9 @@ public class RobotHardwareImpl implements RobotHardware {
 
     /**
      * Get the AprilTag detection with the specified ID.
-     * 
+     *
      * @param desiredTagId The desired tag id.
-     * @return The matching {@link AprilTagDetection} object, or null if no match is found. 
+     * @return The matching {@link AprilTagDetection} object, or null if no match is found.
      */
     @Override
     public AprilTagDetection getAprilTag(int desiredTagId) {
@@ -681,7 +682,7 @@ public class RobotHardwareImpl implements RobotHardware {
 
     @Override
     public RobotHardware forward(double d) {
-        return driveStraight(0.6, d, getHeading());
+        return driveStraight(0.55, d, getHeading());
     }
     @Override
     public RobotHardware fastForward(double d,int step){
@@ -715,7 +716,7 @@ public class RobotHardwareImpl implements RobotHardware {
     }
     @Override
     public RobotHardware leftShift(double d) {
-        return driveStrafe(1, -d, getHeading());
+        return driveStrafe(0.7, -d, getHeading());
     }
 
     @Override
@@ -972,6 +973,220 @@ public class RobotHardwareImpl implements RobotHardware {
         return this;
     }
 
+    @Override
+    public double[] SpinVector(double[] vector, double angle){
+        double x = vector[0]*Math.cos(Math.toRadians(angle)) - vector[1]*Math.sin(Math.toRadians(angle));
+        double y = vector[0]*Math.sin(Math.toRadians(angle)) + vector[1]*Math.cos(Math.toRadians(angle));
+        return new double[]{x,y};
+    }
+
+    @Override
+    public double[] getDisplacement(double[] CurrentPos, double[] DesiredPos) {
+        double CurrentX = CurrentPos[0];
+        double CurrentY = CurrentPos[1];
+        double CurrentHeading = CurrentPos[2];
+        double DesiredX = DesiredPos[0];
+        double DesiredY = DesiredPos[1];
+        double DesiredHeading = DesiredPos[2];
+        double[] Displacement = {DesiredX - CurrentX, DesiredY - CurrentY, CurrentHeading};
+        Displacement = SpinVector(Displacement, -CurrentHeading);
+        return Displacement;
+    }
+    @Override
+    public RobotHardware gotoPosition(double[] CurrentPos, double[] DesiredPos){
+        double[] Displacement = getDisplacement(CurrentPos,DesiredPos);
+        double DesiredHeading = DesiredPos[2];
+        return fastForward(-Displacement[0])
+                .leftShift(-Displacement[1])
+                .fastSpin(DesiredHeading);
+    }
+    @Override
+    public RobotHardware gotoPosition(double x, double y, double h){
+        SparkFunOTOS.Pose2D CurrentPos = getPosition();
+        double[] DesiredPos = {x,y,h};
+        return gotoPosition(new double[]{CurrentPos.x,CurrentPos.y,CurrentPos.h},DesiredPos);
+    }
+
+    @Override
+    public RobotHardware gotoPosition2(double[] CurrentPos, double[] DesiredPos){
+        double[] Displacement = getDisplacement(CurrentPos,DesiredPos);
+        double DesiredHeading = DesiredPos[2];
+        return leftShift(-Displacement[1])
+                .fastForward(-Displacement[0])
+                .fastSpin(DesiredHeading);
+    }
+
+    @Override
+    public RobotHardware gotoPosition2(double x, double y, double h){
+        SparkFunOTOS.Pose2D CurrentPos = getPosition();
+        double[] DesiredPos = {x,y,h};
+        return gotoPosition2(new double[]{CurrentPos.x,CurrentPos.y,CurrentPos.h},DesiredPos);
+    }
+
+    @Override
+    public RobotHardware fastGotoPosition(double[] CurrentPos, double[] DesiredPos) {
+        double[] Displacement = getDisplacement(CurrentPos, DesiredPos);
+        double DesiredHeading = DesiredPos[2];
+        double deltaX= Displacement[0];
+        double deltaY = Displacement[1];
+
+        int angle = 45;
+        if (deltaX >= 0 && deltaY >= 0) {
+            angle = 45;
+        } else if (deltaX >= 0 && deltaY <= 0) {
+            angle = -45;
+        } else if (deltaX <= 0 && deltaY >= 0) {
+            angle = 135;
+        } else if (deltaX <= 0 && deltaY <= 0) {
+            angle = -135;
+        }
+        double diagonalDistance = Math.min(Math.abs(deltaX),Math.abs(deltaY));
+        return moveDiagonally(diagonalDistance,angle)
+                .gotoPosition(DesiredPos[0],DesiredPos[1],DesiredPos[2]);
+    }
+
+    @Override
+    public RobotHardware fastGotoPosition(double x, double y, double h){
+        SparkFunOTOS.Pose2D CurrentPos = getPosition();
+        double[] DesiredPos = {x,y,h};
+        return fastGotoPosition(new double[]{CurrentPos.x,CurrentPos.y,CurrentPos.h},DesiredPos);
+    }
+
+    @Override
+    public void setDiagonalTargetPosition(int moveCounts, double angle) {
+        leftFrontDrive.setTargetPosition(leftFrontDrive.getCurrentPosition() + moveCounts);
+        rightFrontDrive.setTargetPosition(rightFrontDrive.getCurrentPosition());
+        rightBackDrive.setTargetPosition(rightBackDrive.getCurrentPosition() + moveCounts);
+        rightBackDrive.setTargetPosition(rightBackDrive.getCurrentPosition());
+    }
+
+    @Override
+    public RobotHardware driveDiagonal(double maxDriveSpeed,
+                                       double distance,
+                                       int angle,
+                                       double heading) {
+        // Ensure that the OpMode is still active
+        if (opMode.opModeIsActive()) {
+
+            //Analyse maxDriveSpeed
+            distance = -distance;
+            maxDriveSpeed = Math.abs(maxDriveSpeed);
+            double maxDriveSpeedX;
+            double maxDriveSpeedY;
+            switch (angle){
+                case 45:
+                    maxDriveSpeedX = maxDriveSpeed;
+                    maxDriveSpeedY = maxDriveSpeed;
+                    break;
+                case -45:
+                    maxDriveSpeedX = maxDriveSpeed;
+                    maxDriveSpeedY = -maxDriveSpeed;
+                    break;
+                case 135:
+                    maxDriveSpeedX = maxDriveSpeed;
+                    maxDriveSpeedY = -maxDriveSpeed;
+                    distance = -distance;
+                    break;
+                case -135:
+                    maxDriveSpeedX = maxDriveSpeed;
+                    maxDriveSpeedY = maxDriveSpeed;
+                    distance = -distance;
+                    break;
+                default:
+                    maxDriveSpeedX = 0;
+                    maxDriveSpeedY = 0;
+            }
+            // Determine new target position, and pass to motor controller
+            int moveCounts = (int) (distance * COUNTS_PER_INCH * 2);
+            setTargetPosition(moveCounts);
+
+            setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+            // Start driving straight, and then enter the control loop
+            driveRobot(maxDriveSpeedX, maxDriveSpeedY, 0);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opMode.opModeIsActive() && isAllBusy()) {
+
+                // Determine required steering to keep on heading
+                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distance < 0)
+                    turnSpeed *= -1.0;
+
+                // Apply the turning correction to the current driving speed.
+                driveRobot(maxDriveSpeedX, maxDriveSpeedY, -turnSpeed);
+                //                telemetry.addData("x","%4.2f, %4.2f, %4.2f, %4.2f, %4d",maxDriveSpeed,distance,heading,turnSpeed,moveCounts);
+                telemetry.update();
+            }
+
+            // Stop all motion & Turn off RUN_TO_POSITION
+            stopMotor();
+            setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        return this;
+    }
+
+    @Override
+    public RobotHardware moveDiagonally(double distance, int angle){
+        return driveDiagonal(0.7,distance,angle,getHeading());
+    }
+    private void configureOtos() {
+        otos.setLinearUnit(DistanceUnit.INCH);
+        otos.setAngularUnit(AngleUnit.DEGREES);
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
+        otos.setOffset(offset);
+
+        otos.setLinearScalar(1.0);
+        otos.setAngularScalar(1.0);
+
+        otos.calibrateImu();
+
+        otos.resetTracking();
+
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
+        otos.setPosition(currentPosition);
+
+        // Get the hardware and firmware version
+        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
+        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
+        otos.getVersionInfo(hwVersion, fwVersion);
+
+        telemetry.addLine("OTOS configured! Press start to get position data!");
+        telemetry.addLine();
+        telemetry.addLine(String.format("OTOS Hardware Version: v%d.%d", hwVersion.major, hwVersion.minor));
+        telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
+        telemetry.update();
+    }
+    @Override
+    public SparkFunOTOS.Pose2D getPosition(){
+        return otos.getPosition();
+    }
+
+    @Override
+    public RobotHardware stretchArm(){
+        return setArmPower(0.75)
+                .sleep(1000)
+                .setArmPower(0)
+                .setDumpPosition(0.4)
+                .sleep(400)
+                .setArmPower(-0.75)
+                .sleep(670)
+                .setArmPower(0);
+    }
+
+    @Override
+    public RobotHardware resetArm(){
+        return setDumpPosition(0.98)
+                .setArmPower(0.75)
+                .sleep(1050)
+                .setArmPower(0)
+                .sleep(600)
+                .setArmPower(-0.75)
+                .sleep(450)
+                .setArmPower(0);
+    }
 }
- 
- 
+
