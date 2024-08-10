@@ -41,7 +41,7 @@ public class ManualOpMode extends LinearOpMode {
         double targetDumpPosition = hardware.getDumpPosition();
         Gamepad gamepad2Snapshot = new Gamepad();
         gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
-        if (hardware.getDumpPosition() < DUMP_JUDGING_THRESHOLD) {
+        if (hardware.getDumpPosition() < DUMP_JUDGING_THRESHOLD && hardware.getDumpPosition() != 0) {
             dumpState = DumpState.STRETCHED;
         } else {
             dumpState = DumpState.RETRACTED;
