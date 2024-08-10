@@ -49,7 +49,7 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
                     .gotoPosition(24,-8.5,-90)
                     .fastBackward(-5)
                     .stretchArm()
-                    .gotoPosition(33,30,-90)
+                    .gotoPosition(31,32,-90)
                     .sleep(100)
                     .setHolderPosition(0.5)
                     .sleep(400);
@@ -58,7 +58,7 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
             hardware.fastGotoPosition(28,2.8,0)
                     .gotoPosition(20.8,2.8,-90)
                     .stretchArm()
-                    .gotoPosition(25,28.5,-90)
+                    .gotoPosition(27,28.5,-90)
                     .setHolderPosition(0.5)
                     .sleep(400);
         }
