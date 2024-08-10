@@ -38,7 +38,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
             //left
             hardware.gotoPosition(24,-3,90)
                     .fastForward(-6)
-                    .gotoPosition(27,-7,-90)
+                    .gotoPosition(22,-7,-90)
                     .fastForward(-21);
             inhalePixel(hardware);
             hardware.gotoPosition2(55,0,-90)
@@ -51,7 +51,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
                     .setArmPower(-0.75)
                     .sleep(650)
                     .setArmPower(0)
-                    .gotoPosition2(23,79,-90)
+                    .gotoPosition2(20,73,-90)
                     .sleep(100)
                     .setHolderPosition(0.5)
                     .sleep(500);
@@ -76,7 +76,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
                     .sleep(650)
                     .setArmPower(0)
                     .moveDiagonally(10,-135)
-                    .gotoPosition2(35,77,-90)
+                    .gotoPosition2(33.5,73,-90)
                     .setHolderPosition(0.5)
                     .sleep(500);
 
@@ -96,8 +96,8 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
                     .setArmPower(-0.75)
                     .sleep(650)
                     .setArmPower(0)
-                    .gotoPosition2(28,77,-90)
-                    .gotoPosition(28,77,-90)
+                    .gotoPosition2(28,73,-90)
+                    .gotoPosition(28,73,-90)
                     .setHolderPosition(0.5)
                     .sleep(500);
         }

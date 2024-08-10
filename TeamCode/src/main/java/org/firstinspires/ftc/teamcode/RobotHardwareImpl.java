@@ -218,6 +218,7 @@ public class RobotHardwareImpl implements RobotHardware {
     @Override
     public void driveRobot(double axial, double lateral, double yaw) {
         telemetry.addData("Speed", "Vy %5.2f, Vx %5.2f, Vr %5.2f ", axial, lateral, yaw);
+        telemetry.addData("pos","x %5.2f, y %5.2f, h %5.2f",getPosition().x,getPosition().y,getPosition().h);
         axial *= AXIAL_REDUCTION;
         lateral *= LATERAL_REDUCTION;
         yaw *= YAW_REDUCTION;

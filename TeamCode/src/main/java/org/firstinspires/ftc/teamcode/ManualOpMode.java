@@ -16,7 +16,8 @@ public class ManualOpMode extends LinearOpMode {
     static double INTAKE_ROLL_IN_POWER = -0.8;
     static double INTAKE_ROLL_OUT_POWER = 0.8;
     static double HOLDER_OPEN_POSITION = 0.5;
-    static double HOLDER_CLOSE_POSITION = 0;
+    static double HOLDER_CLOSE_POSITION = 0.2;
+    static double HOLDER_FIXING_POSITION = 0;
     static double DRONE_OPEN_POSITION = 0.64;
     static double DRONE_CLOSE_POSITION = 0.94;
     static double CYCLE_TIME_SECONDS = 0.04;
@@ -38,8 +39,8 @@ public class ManualOpMode extends LinearOpMode {
         DumpState dumpState;
         double checkpoint = 0;
         double targetDumpPosition = hardware.getDumpPosition();
-//        Gamepad gamepad2Snapshot = new Gamepad();
-//        gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
+        Gamepad gamepad2Snapshot = new Gamepad();
+        gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
         if (hardware.getDumpPosition() < DUMP_JUDGING_THRESHOLD) {
             dumpState = DumpState.STRETCHED;
         } else {
@@ -74,8 +75,13 @@ public class ManualOpMode extends LinearOpMode {
 
             if (gamepad2.a) {
                 hardware.setHolderPosition(HOLDER_OPEN_POSITION);
-            } else {
+                telemetry.addData("open",1);
+            } else if (gamepad2.left_bumper) {
+                hardware.setHolderPosition(HOLDER_FIXING_POSITION);
+                telemetry.addData("fix",1);
+            } else{
                 hardware.setHolderPosition(HOLDER_CLOSE_POSITION);
+                telemetry.addData("close",1);
             }
 
             if (gamepad2.y && dumpState.isAtIdle()) {
@@ -130,7 +136,7 @@ public class ManualOpMode extends LinearOpMode {
             hardware.driveRobot(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
             telemetry.addData("distance", hardware.getDistance());
-//            gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
+            gamepad2Snapshot.fromByteArray(gamepad2.toByteArray());
             telemetry.update();
             sleep(10);
         }
