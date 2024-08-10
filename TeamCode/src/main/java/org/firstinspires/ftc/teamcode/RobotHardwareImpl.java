@@ -1171,22 +1171,26 @@ public class RobotHardwareImpl implements RobotHardware {
                 .sleep(1000)
                 .setArmPower(0)
                 .setDumpPosition(0.4)
-                .sleep(400)
+                .sleep(450)
                 .setArmPower(-0.75)
-                .sleep(670)
+                .sleep(650)
                 .setArmPower(0);
     }
 
     @Override
     public RobotHardware resetArm(){
-        return setDumpPosition(0.98)
-                .setArmPower(0.75)
-                .sleep(1050)
-                .setArmPower(0)
-                .sleep(600)
-                .setArmPower(-0.75)
-                .sleep(450)
+        setArmPower(0.75)
+                .sleep(750)
                 .setArmPower(0);
+        for (double dumpPosition = 0.45; dumpPosition <= 0.95; dumpPosition += 0.025) {
+            setDumpPosition(dumpPosition);
+            sleep(70);
+        }
+        setDumpPosition(0.96);
+        setArmPower(-0.75)
+                .sleep(650)
+                .setArmPower(0);
+        return this;
     }
 }
 
