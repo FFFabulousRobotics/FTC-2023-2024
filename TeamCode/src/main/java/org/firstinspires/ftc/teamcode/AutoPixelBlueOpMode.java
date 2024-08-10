@@ -31,9 +31,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
             sleep(10);
         }
         double xCoord = recognition == null ? 320 : (recognition.getLeft() + recognition.getRight()) / 2;
-//        !!!!!!!!
-//        This line is used to debug,delete it when it's finished!
-//        !!!!!!!!
+
         if (xCoord < 213) {
             //left
             hardware.gotoPosition(24,-3,90)

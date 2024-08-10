@@ -28,10 +28,6 @@ public class AutoBoardBlueOpMode extends LinearOpMode {
         }
         double xCoord = recognition == null ? 320 : (recognition.getLeft() + recognition.getRight()) / 2;
 
-//        !!!!!!!!
-//        xCoord = 500;
-//        This line is used to debug,delete it when it's finished!
-//        !!!!!!!!
         if (xCoord < 213) {
             //left
             hardware.fastGotoPosition(22,10.5,0)
