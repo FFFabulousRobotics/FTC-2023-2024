@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 public class ManualOpMode extends LinearOpMode {
     RobotHardware hardware;
 
-    static double DUMP_JUDGING_THRESHOLD = 0.6;
+    static double DUMP_JUDGING_THRESHOLD = 0.75;
     static double LIFT_EXTRACT_POWER = 1;
     static double LIFT_RETRACT_POWER = -1;
     static double ARM_EXTRACT_POWER = -0.5;
@@ -18,13 +18,13 @@ public class ManualOpMode extends LinearOpMode {
     static double HOLDER_OPEN_POSITION = 0.5;
     static double HOLDER_CLOSE_POSITION = 0.2;
     static double HOLDER_FIXING_POSITION = 0;
-    static double DRONE_OPEN_POSITION = 0.64;
-    static double DRONE_CLOSE_POSITION = 0.94;
+    static double DRONE_OPEN_POSITION = 0.3;
+    static double DRONE_CLOSE_POSITION = 0.7;
     static double CYCLE_TIME_SECONDS = 0.04;
-    static double DUMP_STRETCHING_FAST_THRESHOLD = 0.43;
-    static double DUMP_RETRACTING_FAST_THRESHOLD = 0.95;
-    static double DUMP_STRETCHED_POSITION = 0.38;
-    static double DUMP_RETRACTED_POSITION = 0.96;
+    static double DUMP_STRETCHING_FAST_THRESHOLD = 0.3;
+    static double DUMP_RETRACTING_FAST_THRESHOLD = 0.8;
+    static double DUMP_STRETCHED_POSITION = 0.26;
+    static double DUMP_RETRACTED_POSITION = 0.84;
     static double DUMP_CHANGING_OFFSET = 0.025;
 
 
@@ -91,6 +91,7 @@ public class ManualOpMode extends LinearOpMode {
                         dumpState = DumpState.RETRACTING;
                         break;
                 }
+                if(hardware.getDumpPosition() == 0){hardware.setDumpPosition(DUMP_RETRACTED_POSITION);}
                 targetDumpPosition = hardware.getDumpPosition();
             }
 
@@ -122,6 +123,7 @@ public class ManualOpMode extends LinearOpMode {
 
 
             telemetry.addData("targetDumpPosition", targetDumpPosition);
+            telemetry.addData("dumpPosition",hardware.getDumpPosition());
             telemetry.addData("dumpstate",dumpState);
 
             if (gamepad2.dpad_down) {

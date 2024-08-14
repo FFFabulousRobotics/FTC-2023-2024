@@ -44,7 +44,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
                     .setArmPower(0.75)
                     .moveDiagonally(18,-135)
                     .setArmPower(0)
-                    .setDumpPosition(0.4)
+                    .setDumpPosition(0.26)
                     .sleep(500)
                     .setArmPower(-0.75)
                     .sleep(650)
@@ -68,7 +68,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
                     .setArmPower(0.75)
                     .moveDiagonally(18,-135)
                     .setArmPower(0)
-                    .setDumpPosition(0.4)
+                    .setDumpPosition(0.26)
                     .sleep(500)
                     .setArmPower(-0.75)
                     .sleep(650)
@@ -89,7 +89,7 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
                     .setArmPower(0.75)
                     .moveDiagonally(18,-135)
                     .setArmPower(0)
-                    .setDumpPosition(0.4)
+                    .setDumpPosition(0.26)
                     .sleep(500)
                     .setArmPower(-0.75)
                     .sleep(650)
@@ -103,18 +103,15 @@ public class AutoPixelBlueOpMode extends LinearOpMode {
     }
 
     public void inhalePixel(RobotHardware hardware){
-                hardware.setIntakePower(0.8)
-                        .leftShift(-5)
-                        .rightShift(-10)
-                        .fastBackward(-4)
-                        .fastForward(-8)
-                        .leftShift(-10)
-                        .rightShift(-5)
-                        .fastBackward(-4)
-                        .fastForward(-2.5)
-                        .backward(-5)
-                        .sleep(500)
-                        .setIntakePower(-0.8);
+        hardware.setIntakePower(0.9)
+                .sleep(500)
+                .fastBackward(-5)
+                .sleep(500)
+                .fastForward(-5)
+                .sleep(500)
+                .fastBackward(-8)
+                .sleep(1000)
+                .setIntakePower(-0.8);
     }
 
 }

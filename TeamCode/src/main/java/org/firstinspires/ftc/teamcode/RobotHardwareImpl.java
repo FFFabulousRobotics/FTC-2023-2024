@@ -993,6 +993,14 @@ public class RobotHardwareImpl implements RobotHardware {
         Displacement = SpinVector(Displacement, -CurrentHeading);
         return Displacement;
     }
+
+    /**
+     * Go to the position given (track only include left/right and forward/backward)
+     * Go forward/backward first,then move left/right.
+     * @param CurrentPos The current position.(position{axial,lateral,heading})
+     * @param DesiredPos The desired position.(position{axial,lateral,heading})
+     * @return RobotHardware class.
+     */
     @Override
     public RobotHardware gotoPosition(double[] CurrentPos, double[] DesiredPos){
         double[] Displacement = getDisplacement(CurrentPos,DesiredPos);
@@ -1001,6 +1009,10 @@ public class RobotHardwareImpl implements RobotHardware {
                 .leftShift(-Displacement[1])
                 .fastSpin(DesiredHeading);
     }
+
+    /**
+     * Go to desired position(move forward/backward first,then left/right)
+     */
     @Override
     public RobotHardware gotoPosition(double x, double y, double h){
         SparkFunOTOS.Pose2D CurrentPos = getPosition();
@@ -1008,6 +1020,13 @@ public class RobotHardwareImpl implements RobotHardware {
         return gotoPosition(new double[]{CurrentPos.x,CurrentPos.y,CurrentPos.h},DesiredPos);
     }
 
+    /**
+     * Go to the position given (track only include left/right and forward/backward)
+     * Move left/right first,then go forward/backward.
+     * @param CurrentPos The current position.(position{axial,lateral,heading})
+     * @param DesiredPos The desired position.(position{axial,lateral,heading})
+     * @return RobotHardware class.
+     */
     @Override
     public RobotHardware gotoPosition2(double[] CurrentPos, double[] DesiredPos){
         double[] Displacement = getDisplacement(CurrentPos,DesiredPos);
@@ -1017,6 +1036,9 @@ public class RobotHardwareImpl implements RobotHardware {
                 .fastSpin(DesiredHeading);
     }
 
+    /**
+     * Go to desired position(Move left/right first,then forward/backward)
+     */
     @Override
     public RobotHardware gotoPosition2(double x, double y, double h){
         SparkFunOTOS.Pose2D CurrentPos = getPosition();
@@ -1024,6 +1046,12 @@ public class RobotHardwareImpl implements RobotHardware {
         return gotoPosition2(new double[]{CurrentPos.x,CurrentPos.y,CurrentPos.h},DesiredPos);
     }
 
+    /**
+     * Go to Desired position by moving diagonally and moving straight.
+     * @param CurrentPos Current position(position{x,y,heading})
+     * @param DesiredPos Desired position(position{x,y,heading})
+     * @return RobotHardware class
+     */
     @Override
     public RobotHardware fastGotoPosition(double[] CurrentPos, double[] DesiredPos) {
         double[] Displacement = getDisplacement(CurrentPos, DesiredPos);
@@ -1046,6 +1074,9 @@ public class RobotHardwareImpl implements RobotHardware {
                 .gotoPosition(DesiredPos[0],DesiredPos[1],DesiredPos[2]);
     }
 
+    /**
+     * Go to desired position(Move diagonally first,then straight)
+     */
     @Override
     public RobotHardware fastGotoPosition(double x, double y, double h){
         SparkFunOTOS.Pose2D CurrentPos = getPosition();
@@ -1061,6 +1092,18 @@ public class RobotHardwareImpl implements RobotHardware {
         rightBackDrive.setTargetPosition(rightBackDrive.getCurrentPosition());
     }
 
+    /**
+     * Move diagonally in 45degrees.
+     * @param maxDriveSpeed MAX Speed for forward/rev motion (range 0 to +1.0) .
+     * @param distance The distance of moving 45degrees(The variation of x and y,
+     *                 without multiplying sqrt2)
+     * @param angle The angle of moving diagonally.It must be +-45/+-145 degrees.
+     *              +angle is counter-clockwise from the robot's current heading.
+     *              -angle is clockwise from the robot's current heading.
+     * @param heading Absolute Heading Angle (in Degrees) relative to last gyro reset.
+     *                0 = forward. +ve is counter-clockwise from forward. -ve is clockwise from forward.
+     *                If a relative angle is required, add/subtract from the current robotHeading.
+     */
     @Override
     public RobotHardware driveDiagonal(double maxDriveSpeed,
                                        double distance,
@@ -1171,7 +1214,7 @@ public class RobotHardwareImpl implements RobotHardware {
         return setArmPower(0.75)
                 .sleep(1000)
                 .setArmPower(0)
-                .setDumpPosition(0.4)
+                .setDumpPosition(0.26)
                 .sleep(450)
                 .setArmPower(-0.75)
                 .sleep(650)
@@ -1183,15 +1226,74 @@ public class RobotHardwareImpl implements RobotHardware {
         setArmPower(0.75)
                 .sleep(750)
                 .setArmPower(0);
-        for (double dumpPosition = 0.45; dumpPosition <= 0.95; dumpPosition += 0.025) {
+        for (double dumpPosition = 0.3; dumpPosition <= 0.8; dumpPosition += 0.025) {
             setDumpPosition(dumpPosition);
             sleep(70);
         }
-        setDumpPosition(0.96);
+        setDumpPosition(0.84);
         setArmPower(-0.75)
                 .sleep(650)
                 .setArmPower(0);
         return this;
+    }
+
+    //The functions below are unfinished
+    //Don't use it!!!
+
+    private void setDirectTargetPosition(int moveCountsX,int moveCountsY) {
+        // Set Target FIRST, then turn on RUN_TO_POSITION
+        leftFrontDrive.setTargetPosition(leftFrontDrive.getCurrentPosition() + moveCountsX + moveCountsY);
+        rightFrontDrive.setTargetPosition(rightFrontDrive.getCurrentPosition() + moveCountsX - moveCountsY);
+        leftBackDrive.setTargetPosition(leftBackDrive.getCurrentPosition() + moveCountsX - moveCountsY);
+        rightBackDrive.setTargetPosition(rightBackDrive.getCurrentPosition() + moveCountsX + moveCountsY);
+    }
+    private RobotHardware driveDirect(double maxDriveSpeed,
+                                        double distanceX,
+                                      double distanceY,
+                                        double heading) {
+        // Ensure that the OpMode is still active
+        if (opMode.opModeIsActive()) {
+            double angle = Math.atan2(distanceY,distanceX);
+            maxDriveSpeed = Math.abs(maxDriveSpeed);
+            double maxDriveSpeedX = maxDriveSpeed*Math.cos(angle);
+            double maxDriveSpeedY = maxDriveSpeed*Math.sin(angle);
+            // Determine new target position, and pass to motor controller
+            int moveCountsX = (int) (distanceX * COUNTS_PER_INCH);
+            int moveCountsY = (int) (distanceY * COUNTS_PER_INCH);
+            setDirectTargetPosition(moveCountsX,moveCountsY);
+
+            setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // Start driving straight, and then enter the control loop
+            driveRobot(maxDriveSpeedX, maxDriveSpeedY, 0);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opMode.opModeIsActive() && isAllBusy()) {
+
+                // Determine required steering to keep on heading
+                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distanceX < 0 && distanceY < 0)
+                    turnSpeed *= -1.0;
+
+                // Apply the turning correction to the current driving speed.
+                driveRobot(maxDriveSpeedX, maxDriveSpeedY, -turnSpeed);
+                //                telemetry.addData("x","%4.2f, %4.2f, %4.2f, %4.2f, %4d",maxDriveSpeed,distance,heading,turnSpeed,moveCounts);
+                telemetry.update();
+            }
+
+            // Stop all motion & Turn off RUN_TO_POSITION
+            stopMotor();
+            setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        return this;
+    }
+    @Override
+    public RobotHardware moveDirect(double x, double y, double h){
+        double[] currentPos = {getPosition().x,getPosition().y,getPosition().h};
+        double[] displacement = getDisplacement(currentPos,new double[]{x,y,h});
+        return driveDirect(0.7,displacement[0],displacement[1],getHeading());
     }
 }
 

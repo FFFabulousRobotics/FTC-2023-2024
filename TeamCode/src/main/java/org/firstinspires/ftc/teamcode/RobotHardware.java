@@ -98,4 +98,6 @@ public interface RobotHardware {
     RobotHardware stretchArm();
 
     RobotHardware resetArm();
+
+    RobotHardware moveDirect(double x, double y, double h);
 }
