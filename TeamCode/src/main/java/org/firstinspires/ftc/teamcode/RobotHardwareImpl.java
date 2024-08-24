@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.CameraControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -1294,6 +1295,12 @@ public class RobotHardwareImpl implements RobotHardware {
         double[] currentPos = {getPosition().x,getPosition().y,getPosition().h};
         double[] displacement = getDisplacement(currentPos,new double[]{x,y,h});
         return driveDirect(0.7,displacement[0],displacement[1],getHeading());
+    }
+
+    @Override
+    public <T extends CameraControl> T getCameraControl(Class<T> controlType) {
+        if (visionPortal == null) return null;
+        return visionPortal.getCameraControl(controlType);
     }
 }
 
