@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.CameraC
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 public interface RobotHardware {
@@ -106,4 +107,6 @@ public interface RobotHardware {
     RobotHardware moveDirect(double x, double y, double h);
 
     <T extends CameraControl> T getCameraControl(Class<T> controlType);
+
+    VisionPortal.CameraState getCameraState();
 }

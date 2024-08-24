@@ -1302,5 +1302,11 @@ public class RobotHardwareImpl implements RobotHardware {
         if (visionPortal == null) return null;
         return visionPortal.getCameraControl(controlType);
     }
+
+    @Override
+    public VisionPortal.CameraState getCameraState() {
+        if (visionPortal == null) return null;
+        return visionPortal.getCameraState();
+    }
 }
 
