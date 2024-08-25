@@ -42,74 +42,75 @@ AutoPixelRedOpMode extends LinearOpMode {
 
         if (xCoord >= 426) {
             //right
-            hardware.gotoPosition2(22,3,-45)
+            hardware.gotoPosition2(22, 3, -45)
                     .fastForward(-4)
                     .fastSpin(-90)
                     .fastForward(-4)
                     .fastBackward(-10)
-                    .gotoPosition2(25,3,90)
+                    .gotoPosition2(25, 3, 90)
                     .fastForward(-18);
             inhalePixel(hardware);
-            hardware.gotoPosition2(47,0,90)
+            hardware.gotoPosition2(47, 0, 90)
                     .fastBackward(-50)
                     .setArmPower(0.75)
-                    .moveDiagonally(16,135)
+                    .moveDiagonally(16, 135)
                     .setArmPower(0)
                     .setDumpPosition(0.26)
                     .sleep(450)
                     .setArmPower(-0.75)
                     .sleep(650)
                     .setArmPower(0)
-                    .gotoPosition2(15,-80,90)
-                    .gotoPosition2(15,-83,90)
+                    .gotoPosition2(15, -80, 90)
+                    .gotoPosition2(15, -83, 90)
                     .setHolderPosition(0.5)
                     .sleep(500);
         } else if (xCoord < 213) {
             //left
-            hardware.gotoPosition(24,-3,90)
+            hardware.gotoPosition(24, -3, 90)
                     .fastForward(-6)
                     .fastBackward(-6)
-                    .gotoPosition2(45.3,21,90)
+                    .gotoPosition2(45.3, 21, 90)
                     .fastForward(-8);
             inhalePixel(hardware);
-            hardware.gotoPosition2(50,0,90)
-                    .gotoPosition2(50,-40,90)
+            hardware.gotoPosition2(50, 0, 90)
+                    .gotoPosition2(50, -40, 90)
                     .setArmPower(0.75)
-                    .moveDiagonally(18,135)
+                    .moveDiagonally(18, 135)
                     .setArmPower(0)
                     .setDumpPosition(0.26)
                     .sleep(450)
                     .setArmPower(-0.75)
                     .sleep(650)
                     .setArmPower(0)
-                    .gotoPosition2(28,-80,90)
-                    .gotoPosition2(28,-86,90)
+                    .gotoPosition2(28, -80, 90)
+                    .gotoPosition2(28, -86, 90)
                     .setHolderPosition(0.5)
                     .sleep(500);
         } else {
             //middle
-            hardware.gotoPosition(28,0,0)
-                    .gotoPosition(25,0,90)
+            hardware.gotoPosition(25, 0, 0)
+                    .gotoPosition(25, 0, 90)
                     .fastForward(-25);
             inhalePixel(hardware);
-            hardware.gotoPosition2(55,0,90)
-                    .gotoPosition2(55,-50,90)
+            hardware.gotoPosition2(55, 0, 90)
+                    .gotoPosition2(55, -50, 90)
                     .setArmPower(0.75)
-                    .moveDiagonally(18,135)
+                    .moveDiagonally(18, 135)
                     .setArmPower(0)
                     .setDumpPosition(0.26)
                     .sleep(450)
                     .setArmPower(-0.75)
                     .sleep(650)
                     .setArmPower(0)
-                    .gotoPosition(21,-80,90)
-                    .gotoPosition2(21,-86,90)
+                    .gotoPosition(21, -80, 90)
+                    .gotoPosition2(21, -86, 90)
                     .setHolderPosition(0.5)
                     .sleep(500);
         }
 
     }
-    public void inhalePixel(RobotHardware hardware){
+
+    public void inhalePixel(RobotHardware hardware) {
         hardware.setIntakePower(0.9)
                 .sleep(500)
                 .fastBackward(-5)

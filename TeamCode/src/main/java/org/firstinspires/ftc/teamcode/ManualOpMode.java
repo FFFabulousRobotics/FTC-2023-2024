@@ -19,7 +19,7 @@ public class ManualOpMode extends LinearOpMode {
     static double HOLDER_CLOSE_POSITION = 0.2;
     static double HOLDER_FIXING_POSITION = 0;
     static double DRONE_OPEN_POSITION = 0.3;
-    static double DRONE_CLOSE_POSITION = 0.7;
+    static double DRONE_CLOSE_POSITION = 0.65;
     static double CYCLE_TIME_SECONDS = 0.04;
     static double DUMP_STRETCHING_FAST_THRESHOLD = 0.3;
     static double DUMP_RETRACTING_FAST_THRESHOLD = 0.8;
@@ -77,7 +77,7 @@ public class ManualOpMode extends LinearOpMode {
                 hardware.setHolderPosition(HOLDER_OPEN_POSITION);
             } else if (gamepad2.left_bumper) {
                 hardware.setHolderPosition(HOLDER_FIXING_POSITION);
-            } else{
+            } else {
                 hardware.setHolderPosition(HOLDER_CLOSE_POSITION);
             }
 
@@ -91,7 +91,9 @@ public class ManualOpMode extends LinearOpMode {
                         dumpState = DumpState.RETRACTING;
                         break;
                 }
-                if(hardware.getDumpPosition() == 0){hardware.setDumpPosition(DUMP_RETRACTED_POSITION);}
+                if (hardware.getDumpPosition() == 0) {
+                    hardware.setDumpPosition(DUMP_RETRACTED_POSITION);
+                }
                 targetDumpPosition = hardware.getDumpPosition();
             }
 
@@ -123,8 +125,8 @@ public class ManualOpMode extends LinearOpMode {
 
 
             telemetry.addData("targetDumpPosition", targetDumpPosition);
-            telemetry.addData("dumpPosition",hardware.getDumpPosition());
-            telemetry.addData("dumpstate",dumpState);
+            telemetry.addData("dumpPosition", hardware.getDumpPosition());
+            telemetry.addData("dumpstate", dumpState);
 
             if (gamepad2.dpad_down) {
                 hardware.setDronePosition(DRONE_OPEN_POSITION);

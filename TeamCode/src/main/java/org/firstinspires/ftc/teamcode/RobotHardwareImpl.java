@@ -136,7 +136,7 @@ public class RobotHardwareImpl implements RobotHardware {
     // ########################################################################################
     // !!!                                  BASIC MOVEMENTS                                 !!!
     // ########################################################################################
-    
+
     @Override
     public void initMovement() {
         // init motors and servos
@@ -170,7 +170,7 @@ public class RobotHardwareImpl implements RobotHardware {
         dumpServo = hardwareMap.get(Servo.class, "Dump");
         droneServo = hardwareMap.get(Servo.class, "Drone");
         holderServo = hardwareMap.get(Servo.class, "Holder");
-        distanceSensor = hardwareMap.get(Rev2mDistanceSensor.class,"Distance");
+        distanceSensor = hardwareMap.get(Rev2mDistanceSensor.class, "Distance");
 
         // hub orientation
         // TODO: EDIT these two lines to match the actual mounting configuration
@@ -219,7 +219,7 @@ public class RobotHardwareImpl implements RobotHardware {
     @Override
     public void driveRobot(double axial, double lateral, double yaw) {
         telemetry.addData("Speed", "Vy %5.2f, Vx %5.2f, Vr %5.2f ", axial, lateral, yaw);
-        telemetry.addData("pos","x %5.2f, y %5.2f, h %5.2f",getPosition().x,getPosition().y,getPosition().h);
+        telemetry.addData("pos", "x %5.2f, y %5.2f, h %5.2f", getPosition().x, getPosition().y, getPosition().h);
         axial *= AXIAL_REDUCTION;
         lateral *= LATERAL_REDUCTION;
         yaw *= YAW_REDUCTION;
@@ -368,10 +368,10 @@ public class RobotHardwareImpl implements RobotHardware {
     public RobotHardware setLiftPower(double power) {
         if (power < 0) {
             liftLeftMotor.setPower(power);
-            liftRightMotor.setPower(power * 0.79);
+            liftRightMotor.setPower(power);
         } else {
             liftLeftMotor.setPower(power);
-            liftRightMotor.setPower(power * 0.7);
+            liftRightMotor.setPower(power);
         }
         return this;
     }
@@ -549,8 +549,8 @@ public class RobotHardwareImpl implements RobotHardware {
 
     /**
      * Move the robot to the desired tag.
-     * 
-     * @param desiredTag The tag detection object.
+     *
+     * @param desiredTag      The tag detection object.
      * @param desiredDistance The desired distance from the tag.
      */
     @Override
@@ -592,7 +592,7 @@ public class RobotHardwareImpl implements RobotHardware {
      * Get the object detection with the specified ID.
      *
      * @param desiredLabel The desired object label.
-     * @return The matching {@link Recognition} object, or null if no match is found. 
+     * @return The matching {@link Recognition} object, or null if no match is found.
      */
     @Override
     public Recognition getTfod(String desiredLabel) {
@@ -623,7 +623,7 @@ public class RobotHardwareImpl implements RobotHardware {
     /**
      * Move the robot to the desired object.
      *
-     * @param desiredTfod The recognition object.
+     * @param desiredTfod          The recognition object.
      * @param desiredWidthInScreen The desired width of the object as seen in the camera.
      */
     @Override
@@ -646,7 +646,7 @@ public class RobotHardwareImpl implements RobotHardware {
 
     /**
      * Read the robot heading directly from the IMU.
-     * 
+     *
      * @return The heading of the robot in degrees.
      */
     @Override
@@ -663,7 +663,7 @@ public class RobotHardwareImpl implements RobotHardware {
     @Override
     public double getHeading(AngleUnit unit) {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        telemetry.addData("Yaw/Pitch/Roll",orientation.toString());
+        telemetry.addData("Yaw/Pitch/Roll", orientation.toString());
         telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
         telemetry.addData("Pitch (X)", "%.2f Deg.", orientation.getPitch(AngleUnit.DEGREES));
         telemetry.addData("Roll (Y)", "%.2f Deg.\n", orientation.getRoll(AngleUnit.DEGREES));
@@ -686,36 +686,44 @@ public class RobotHardwareImpl implements RobotHardware {
     public RobotHardware forward(double d) {
         return driveStraight(0.55, d, getHeading());
     }
+
     @Override
-    public RobotHardware fastForward(double d,int step){
-        for(int i=0;i<step;i++){
-            forward(d/step);
+    public RobotHardware fastForward(double d, int step) {
+        for (int i = 0; i < step; i++) {
+            forward(d / step);
         }
         return this;
     }
 
     @Override
-    public RobotHardware fastForward(double d) {return  driveStraight(0.7, d, getHeading());}
+    public RobotHardware fastForward(double d) {
+        return driveStraight(0.7, d, getHeading());
+    }
+
     @Override
     public RobotHardware backward(double d) {
         return driveStraight(0.6, -d, getHeading());
     }
+
     @Override
-    public RobotHardware fastBackward(double d,int step){
-        for(int i=0;i<step;i++){
-            fastBackward(d/step);
+    public RobotHardware fastBackward(double d, int step) {
+        for (int i = 0; i < step; i++) {
+            fastBackward(d / step);
         }
         return this;
     }
 
 
     @Override
-    public RobotHardware fastBackward(double d) {return driveStraight(0.7, -d, getHeading());}
+    public RobotHardware fastBackward(double d) {
+        return driveStraight(0.7, -d, getHeading());
+    }
 
     @Override
     public RobotHardware rightShift(double d) {
         return driveStrafe(0.7, d, getHeading());
     }
+
     @Override
     public RobotHardware leftShift(double d) {
         return driveStrafe(0.7, -d, getHeading());
@@ -727,7 +735,9 @@ public class RobotHardwareImpl implements RobotHardware {
     }
 
     @Override
-    public RobotHardware fastSpin(double h) {return turnToHeading(0.7, h);}
+    public RobotHardware fastSpin(double h) {
+        return turnToHeading(0.7, h);
+    }
 
     @Override
     public RobotHardware sleep(long milliseconds) {
@@ -743,7 +753,7 @@ public class RobotHardwareImpl implements RobotHardware {
      */
 
     // **********  HIGH Level driving functions.  ********************
-    
+
     /**
      * Drive in a straight line, on a fixed compass heading (angle), based on encoder counts.
      * Move will stop if either of these conditions occur:
@@ -804,6 +814,7 @@ public class RobotHardwareImpl implements RobotHardware {
     public RobotHardware driveStrafe(double distance) {
         return driveStrafe(0.5, distance, 0);
     }
+
     @Override
     public RobotHardware driveStrafe(double maxDriveSpeed,
                                      double distance,
@@ -965,21 +976,22 @@ public class RobotHardwareImpl implements RobotHardware {
     public double getDistance() {
         return distanceSensor.getDistance(DistanceUnit.INCH);
     }
+
     @Override
-    public RobotHardware gotoDistance(double target_distance,double init_distance){
-        if(Math.abs(target_distance - getDistance() - init_distance) < 1){
-            fastForward(-(getDistance()-target_distance));
-        }else{
+    public RobotHardware gotoDistance(double target_distance, double init_distance) {
+        if (Math.abs(target_distance - getDistance() - init_distance) < 1) {
+            fastForward(-(getDistance() - target_distance));
+        } else {
             fastForward(-init_distance);
         }
         return this;
     }
 
     @Override
-    public double[] SpinVector(double[] vector, double angle){
-        double x = vector[0]*Math.cos(Math.toRadians(angle)) - vector[1]*Math.sin(Math.toRadians(angle));
-        double y = vector[0]*Math.sin(Math.toRadians(angle)) + vector[1]*Math.cos(Math.toRadians(angle));
-        return new double[]{x,y};
+    public double[] SpinVector(double[] vector, double angle) {
+        double x = vector[0] * Math.cos(Math.toRadians(angle)) - vector[1] * Math.sin(Math.toRadians(angle));
+        double y = vector[0] * Math.sin(Math.toRadians(angle)) + vector[1] * Math.cos(Math.toRadians(angle));
+        return new double[]{x, y};
     }
 
     @Override
@@ -998,13 +1010,14 @@ public class RobotHardwareImpl implements RobotHardware {
     /**
      * Go to the position given (track only include left/right and forward/backward)
      * Go forward/backward first,then move left/right.
+     *
      * @param CurrentPos The current position.(position{axial,lateral,heading})
      * @param DesiredPos The desired position.(position{axial,lateral,heading})
      * @return RobotHardware class.
      */
     @Override
-    public RobotHardware gotoPosition(double[] CurrentPos, double[] DesiredPos){
-        double[] Displacement = getDisplacement(CurrentPos,DesiredPos);
+    public RobotHardware gotoPosition(double[] CurrentPos, double[] DesiredPos) {
+        double[] Displacement = getDisplacement(CurrentPos, DesiredPos);
         double DesiredHeading = DesiredPos[2];
         return fastForward(-Displacement[0])
                 .leftShift(-Displacement[1])
@@ -1015,22 +1028,23 @@ public class RobotHardwareImpl implements RobotHardware {
      * Go to desired position(move forward/backward first,then left/right)
      */
     @Override
-    public RobotHardware gotoPosition(double x, double y, double h){
+    public RobotHardware gotoPosition(double x, double y, double h) {
         SparkFunOTOS.Pose2D CurrentPos = getPosition();
-        double[] DesiredPos = {x,y,h};
-        return gotoPosition(new double[]{CurrentPos.x,CurrentPos.y,CurrentPos.h},DesiredPos);
+        double[] DesiredPos = {x, y, h};
+        return gotoPosition(new double[]{CurrentPos.x, CurrentPos.y, CurrentPos.h}, DesiredPos);
     }
 
     /**
      * Go to the position given (track only include left/right and forward/backward)
      * Move left/right first,then go forward/backward.
+     *
      * @param CurrentPos The current position.(position{axial,lateral,heading})
      * @param DesiredPos The desired position.(position{axial,lateral,heading})
      * @return RobotHardware class.
      */
     @Override
-    public RobotHardware gotoPosition2(double[] CurrentPos, double[] DesiredPos){
-        double[] Displacement = getDisplacement(CurrentPos,DesiredPos);
+    public RobotHardware gotoPosition2(double[] CurrentPos, double[] DesiredPos) {
+        double[] Displacement = getDisplacement(CurrentPos, DesiredPos);
         double DesiredHeading = DesiredPos[2];
         return leftShift(-Displacement[1])
                 .fastForward(-Displacement[0])
@@ -1041,14 +1055,15 @@ public class RobotHardwareImpl implements RobotHardware {
      * Go to desired position(Move left/right first,then forward/backward)
      */
     @Override
-    public RobotHardware gotoPosition2(double x, double y, double h){
+    public RobotHardware gotoPosition2(double x, double y, double h) {
         SparkFunOTOS.Pose2D CurrentPos = getPosition();
-        double[] DesiredPos = {x,y,h};
-        return gotoPosition2(new double[]{CurrentPos.x,CurrentPos.y,CurrentPos.h},DesiredPos);
+        double[] DesiredPos = {x, y, h};
+        return gotoPosition2(new double[]{CurrentPos.x, CurrentPos.y, CurrentPos.h}, DesiredPos);
     }
 
     /**
      * Go to Desired position by moving diagonally and moving straight.
+     *
      * @param CurrentPos Current position(position{x,y,heading})
      * @param DesiredPos Desired position(position{x,y,heading})
      * @return RobotHardware class
@@ -1057,7 +1072,7 @@ public class RobotHardwareImpl implements RobotHardware {
     public RobotHardware fastGotoPosition(double[] CurrentPos, double[] DesiredPos) {
         double[] Displacement = getDisplacement(CurrentPos, DesiredPos);
         double DesiredHeading = DesiredPos[2];
-        double deltaX= Displacement[0];
+        double deltaX = Displacement[0];
         double deltaY = Displacement[1];
 
         int angle = 45;
@@ -1070,19 +1085,19 @@ public class RobotHardwareImpl implements RobotHardware {
         } else if (deltaX <= 0 && deltaY <= 0) {
             angle = -135;
         }
-        double diagonalDistance = Math.min(Math.abs(deltaX),Math.abs(deltaY));
-        return moveDiagonally(diagonalDistance,angle)
-                .gotoPosition(DesiredPos[0],DesiredPos[1],DesiredPos[2]);
+        double diagonalDistance = Math.min(Math.abs(deltaX), Math.abs(deltaY));
+        return moveDiagonally(diagonalDistance, angle)
+                .gotoPosition(DesiredPos[0], DesiredPos[1], DesiredPos[2]);
     }
 
     /**
      * Go to desired position(Move diagonally first,then straight)
      */
     @Override
-    public RobotHardware fastGotoPosition(double x, double y, double h){
+    public RobotHardware fastGotoPosition(double x, double y, double h) {
         SparkFunOTOS.Pose2D CurrentPos = getPosition();
-        double[] DesiredPos = {x,y,h};
-        return fastGotoPosition(new double[]{CurrentPos.x,CurrentPos.y,CurrentPos.h},DesiredPos);
+        double[] DesiredPos = {x, y, h};
+        return fastGotoPosition(new double[]{CurrentPos.x, CurrentPos.y, CurrentPos.h}, DesiredPos);
     }
 
     @Override
@@ -1095,15 +1110,16 @@ public class RobotHardwareImpl implements RobotHardware {
 
     /**
      * Move diagonally in 45degrees.
+     *
      * @param maxDriveSpeed MAX Speed for forward/rev motion (range 0 to +1.0) .
-     * @param distance The distance of moving 45degrees(The variation of x and y,
-     *                 without multiplying sqrt2)
-     * @param angle The angle of moving diagonally.It must be +-45/+-145 degrees.
-     *              +angle is counter-clockwise from the robot's current heading.
-     *              -angle is clockwise from the robot's current heading.
-     * @param heading Absolute Heading Angle (in Degrees) relative to last gyro reset.
-     *                0 = forward. +ve is counter-clockwise from forward. -ve is clockwise from forward.
-     *                If a relative angle is required, add/subtract from the current robotHeading.
+     * @param distance      The distance of moving 45degrees(The variation of x and y,
+     *                      without multiplying sqrt2)
+     * @param angle         The angle of moving diagonally.It must be +-45/+-145 degrees.
+     *                      +angle is counter-clockwise from the robot's current heading.
+     *                      -angle is clockwise from the robot's current heading.
+     * @param heading       Absolute Heading Angle (in Degrees) relative to last gyro reset.
+     *                      0 = forward. +ve is counter-clockwise from forward. -ve is clockwise from forward.
+     *                      If a relative angle is required, add/subtract from the current robotHeading.
      */
     @Override
     public RobotHardware driveDiagonal(double maxDriveSpeed,
@@ -1118,7 +1134,7 @@ public class RobotHardwareImpl implements RobotHardware {
             maxDriveSpeed = Math.abs(maxDriveSpeed);
             double maxDriveSpeedX;
             double maxDriveSpeedY;
-            switch (angle){
+            switch (angle) {
                 case 45:
                     maxDriveSpeedX = maxDriveSpeed;
                     maxDriveSpeedY = maxDriveSpeed;
@@ -1175,9 +1191,10 @@ public class RobotHardwareImpl implements RobotHardware {
     }
 
     @Override
-    public RobotHardware moveDiagonally(double distance, int angle){
-        return driveDiagonal(0.7,distance,angle,getHeading());
+    public RobotHardware moveDiagonally(double distance, int angle) {
+        return driveDiagonal(0.7, distance, angle, getHeading());
     }
+
     private void configureOtos() {
         otos.setLinearUnit(DistanceUnit.INCH);
         otos.setAngularUnit(AngleUnit.DEGREES);
@@ -1205,13 +1222,14 @@ public class RobotHardwareImpl implements RobotHardware {
         telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
         telemetry.update();
     }
+
     @Override
-    public SparkFunOTOS.Pose2D getPosition(){
+    public SparkFunOTOS.Pose2D getPosition() {
         return otos.getPosition();
     }
 
     @Override
-    public RobotHardware stretchArm(){
+    public RobotHardware stretchArm() {
         return setArmPower(0.75)
                 .sleep(1000)
                 .setArmPower(0)
@@ -1223,7 +1241,7 @@ public class RobotHardwareImpl implements RobotHardware {
     }
 
     @Override
-    public RobotHardware resetArm(){
+    public RobotHardware resetArm() {
         setArmPower(0.75)
                 .sleep(750)
                 .setArmPower(0);
@@ -1241,27 +1259,28 @@ public class RobotHardwareImpl implements RobotHardware {
     //The functions below are unfinished
     //Don't use it!!!
 
-    private void setDirectTargetPosition(int moveCountsX,int moveCountsY) {
+    private void setDirectTargetPosition(int moveCountsX, int moveCountsY) {
         // Set Target FIRST, then turn on RUN_TO_POSITION
         leftFrontDrive.setTargetPosition(leftFrontDrive.getCurrentPosition() + moveCountsX + moveCountsY);
         rightFrontDrive.setTargetPosition(rightFrontDrive.getCurrentPosition() + moveCountsX - moveCountsY);
         leftBackDrive.setTargetPosition(leftBackDrive.getCurrentPosition() + moveCountsX - moveCountsY);
         rightBackDrive.setTargetPosition(rightBackDrive.getCurrentPosition() + moveCountsX + moveCountsY);
     }
+
     private RobotHardware driveDirect(double maxDriveSpeed,
-                                        double distanceX,
+                                      double distanceX,
                                       double distanceY,
-                                        double heading) {
+                                      double heading) {
         // Ensure that the OpMode is still active
         if (opMode.opModeIsActive()) {
-            double angle = Math.atan2(distanceY,distanceX);
+            double angle = Math.atan2(distanceY, distanceX);
             maxDriveSpeed = Math.abs(maxDriveSpeed);
-            double maxDriveSpeedX = maxDriveSpeed*Math.cos(angle);
-            double maxDriveSpeedY = maxDriveSpeed*Math.sin(angle);
+            double maxDriveSpeedX = maxDriveSpeed * Math.cos(angle);
+            double maxDriveSpeedY = maxDriveSpeed * Math.sin(angle);
             // Determine new target position, and pass to motor controller
             int moveCountsX = (int) (distanceX * COUNTS_PER_INCH);
             int moveCountsY = (int) (distanceY * COUNTS_PER_INCH);
-            setDirectTargetPosition(moveCountsX,moveCountsY);
+            setDirectTargetPosition(moveCountsX, moveCountsY);
 
             setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -1290,11 +1309,12 @@ public class RobotHardwareImpl implements RobotHardware {
         }
         return this;
     }
+
     @Override
-    public RobotHardware moveDirect(double x, double y, double h){
-        double[] currentPos = {getPosition().x,getPosition().y,getPosition().h};
-        double[] displacement = getDisplacement(currentPos,new double[]{x,y,h});
-        return driveDirect(0.7,displacement[0],displacement[1],getHeading());
+    public RobotHardware moveDirect(double x, double y, double h) {
+        double[] currentPos = {getPosition().x, getPosition().y, getPosition().h};
+        double[] displacement = getDisplacement(currentPos, new double[]{x, y, h});
+        return driveDirect(0.7, displacement[0], displacement[1], getHeading());
     }
 
     @Override
@@ -1309,4 +1329,5 @@ public class RobotHardwareImpl implements RobotHardware {
         return visionPortal.getCameraState();
     }
 }
+
 
