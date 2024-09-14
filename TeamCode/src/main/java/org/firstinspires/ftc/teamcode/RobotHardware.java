@@ -153,13 +153,3 @@ public interface RobotHardware {
 
     VisionPortal.CameraState getCameraState();
 }
-/*
-听好了：8月25日，所有小舵机就此沦陷。每个巨大公差的零件都将迎来一场旋涡，
-为这些参加FTC季后赛的同学带来Beyond难度。
-
-你所熟知的一切都将改变，你所熟悉的零件都将加诸赛金的试炼。
-
-至此，一锤定音。
-尘埃，已然落定。
-#FTC季后赛# #赛金# #Beyond#
- */
